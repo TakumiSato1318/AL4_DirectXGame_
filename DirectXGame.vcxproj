@@ -94,6 +94,9 @@
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Material.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="Object3d.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="WinApp.cpp" />
@@ -160,6 +163,9 @@
     <ClInclude Include="DirectXCommon.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="Object3d.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="WinApp.h" />
