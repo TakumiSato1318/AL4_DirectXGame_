@@ -15,5 +15,8 @@ public:
 
 	static bool CheckSphere2Triangle(const Sphere& sphere, const Triangle&
 		triangle, DirectX::XMVECTOR* inter = nullptr);
+
+	static bool CheckRay2Plane(const Ray& ray, const Plane& plane,
+		float* distance = nullptr, DirectX::XMVECTOR* inter = nullptr);
 };
 
