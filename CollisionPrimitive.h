@@ -48,5 +48,7 @@ public:
 	//法線ベクトル
 	DirectX::XMVECTOR normal;
 
+	void CompuleNormal();
+
 };
 

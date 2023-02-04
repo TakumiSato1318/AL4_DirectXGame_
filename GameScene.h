@@ -7,7 +7,7 @@
 #include "Object3d.h"
 #include"Model.h"
 #include "DebugText.h"
-#include"ColisionPrimitive.h"
+#include"CollisionPrimitive.h"
 
 /// <summary>
 /// ゲームシーン
@@ -62,10 +62,10 @@ private: // メンバ変数
 	/// ゲームシーン用
 	/// </summary>
 	Sprite* spriteBG = nullptr;
-	Object3d* object3d = nullptr;
-	Object3d* object3d2 = nullptr;
-	Model* model = nullptr;
-	Model* model2 = nullptr;
+	Object3d* cheeseObj = nullptr;
+	Object3d* kinokoObj = nullptr;
+	Model* cheeseModel = nullptr;
+	Model* kinokoModel = nullptr;
 
 	Sprite* sprite1 = nullptr;
 	Sprite* sprite2 = nullptr;

@@ -2,6 +2,7 @@
 #include <d3dcompiler.h>
 #include<string>
 #include<vector>
+#include"BaseCollider.h"
 
 #pragma comment(lib, "d3dcompiler.lib")
 
@@ -34,6 +35,13 @@ XMFLOAT3 Object3d::up = { 0, 1, 0 };
 //std::vector<Object3d::VertexPosNormalUv> Object3d::vertices;
 //std::vector<unsigned short> Object3d::indices;
 //Object3d::Material Object3d::material;
+
+Object3d::~Object3d()
+{
+	if (collider) {
+		delete collider;
+	}
+}
 
 bool Object3d::StaticInitialize(ID3D12Device * device, int window_width, int window_height)
 {
@@ -314,6 +322,8 @@ bool Object3d::Initialize()
 	// nullptrチェック
 	assert(device);
 
+	name = typeid(*this).name();
+
 	// ヒーププロパティ
 	CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
 	// リソース設定
@@ -381,6 +391,11 @@ void Object3d::Update()
 	constMap1->specular = model->GetMaterial().specular;
 	constMap1->alpha = model->GetMaterial().alpha;
 	constBuffB1->Unmap(0, nullptr);
+
+	//当たり判定更新
+	if (collider) {
+		collider->Update();
+	}
 }
 
 void Object3d::Draw()
@@ -396,4 +411,10 @@ void Object3d::Draw()
 	cmdList->SetGraphicsRootConstantBufferView(1, constBuffB1->GetGPUVirtualAddress());
 
 	model->Draw(cmdList);
+}
+
+void Object3d::SetCollider(BaseCollider* collider)
+{
+	collider->SetObject(this);
+	this->collider = collider;
 }

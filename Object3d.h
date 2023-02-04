@@ -2,8 +2,10 @@
 #include<Windows.h>
 #include <DirectXMath.h>
 #include <wrl.h>
-
+#include"CollisionInfo.h"
 #include"Model.h"
+
+class BaseCollider;
 
 /// <summary>
 /// 3Dオブジェクト
@@ -149,16 +151,31 @@ private:// 静的メンバ関数
 	static void UpdateViewMatrix();
 
 public: // メンバ関数
-	bool Initialize();
+
+	Object3d() = default;
+
+	virtual ~Object3d();
+
+	//bool Initialize();
+	virtual bool Initialize();
+
 	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>
-	void Update();
+	//void Update();
+	virtual void Update();
 
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw();
+	//void Draw();
+	virtual void Draw();
+
+	const XMMATRIX& GetMatWorld() { return matWorld; }
+
+	void SetCollider(BaseCollider* collider);
+
+	virtual void OnCollision(const CollisionInfo& info){}
 
 	/// <summary>
 	/// 座標の取得
@@ -180,7 +197,13 @@ public: // メンバ関数
 
 	void SetModel(Model* _model) { model = _model; }
 
-private: // メンバ変数
+protected: // メンバ変数
+
+	//クラス名(デバッグ用)
+	const char* name = nullptr;
+	//コライダー
+	BaseCollider* collider=nullptr;
+
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
 	ComPtr<ID3D12Resource> constBuffB1; // 定数バッファ
 	Model* model = nullptr;

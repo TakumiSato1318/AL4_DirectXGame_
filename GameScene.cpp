@@ -15,7 +15,7 @@ GameScene::GameScene()
 GameScene::~GameScene()
 {
 	delete spriteBG;
-	delete object3d;
+	delete cheeseObj;
 	delete sprite1;
 	delete sprite2;
 }
@@ -45,16 +45,16 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	// 背景スプライト生成
 	spriteBG = Sprite::Create(1, { 0.0f,0.0f });
 	// 3Dオブジェクト生成
-	model = Model::StaticCreateFromOBJ("cheese");
-	object3d = Object3d::Create(model);
-	object3d->SetPosition({ 0.f,0.f,0.f });
-	object3d->SetScale({ 1.f,1.f,1.f });
-	object3d->Update();
-	model2 = Model::StaticCreateFromOBJ("small");
-	object3d2 = Object3d::Create(model2);
-	object3d2->SetPosition({ 0.f,0.f,0.f });
-	object3d2->SetScale({ 2.f,2.f,2.f });
-	object3d2->Update();
+	cheeseModel = Model::StaticCreateFromOBJ("cheese");
+	cheeseObj = Object3d::Create(cheeseModel);
+	cheeseObj->SetPosition({ 0.f,0.f,0.f });
+	cheeseObj->SetScale({ 1.f,1.f,1.f });
+	cheeseObj->Update();
+	kinokoModel = Model::StaticCreateFromOBJ("small");
+	kinokoObj = Object3d::Create(kinokoModel);
+	kinokoObj->SetPosition({ 0.f,0.f,0.f });
+	kinokoObj->SetScale({ 2.f,2.f,2.f });
+	kinokoObj->Update();
 
 	//球の初期値を設定
 	sphere.center = XMVectorSet(0, 2, 0, 1);//中心点座標
@@ -82,7 +82,7 @@ void GameScene::Update()
 	if (input->PushKey(DIK_UP) || input->PushKey(DIK_DOWN) || input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT))
 	{
 		// 現在の座標を取得
-		XMFLOAT3 position = object3d->GetPosition();
+		XMFLOAT3 position = cheeseObj->GetPosition();
 
 		// 移動後の座標を計算
 		if (input->PushKey(DIK_UP)) { position.z -= 1.0f; }
@@ -91,7 +91,7 @@ void GameScene::Update()
 		else if (input->PushKey(DIK_LEFT)) { position.x -= 1.0f; }*/
 
 		// 座標の変更を反映
-		object3d->SetPosition(position);
+		cheeseObj->SetPosition(position);
 	}
 
 	// カメラ移動
@@ -161,25 +161,49 @@ void GameScene::Update()
 	//}
 
 	//レイと平面の当たり判定
+	//XMVECTOR inter;
+	//float distance;
+	//bool hit = Colision::CheckRay2Plane(ray, plane,
+	//&distance,&inter);
+	//if (hit) {
+	//	debugText.Print("HIT", 50, 260, 1.0f);
+	//	//stringstreamをリセットし、交点座標を埋め込む
+	//	raystr.str("");
+	//	raystr.clear();
+	//	raystr<<"("
+	//	<< std::fixed << std::setprecision(2)
+	//		<< inter.m128_f32[0] << ","
+	//		<< inter.m128_f32[1] << ","
+	//		<< inter.m128_f32[2] << ")";
+
+	//	debugText.Print(raystr.str(), 50, 280, 1.f);
+	//}
+
+	//レイと球の当たり判定
 	XMVECTOR inter;
 	float distance;
-	bool hit = Colision::CheckRay2Plane(ray, plane,
-	&distance,&inter);
+	bool hit = Colision::CheckRay2Sphere(ray, sphere,	&distance, &inter);
 	if (hit) {
 		debugText.Print("HIT", 50, 260, 1.0f);
 		//stringstreamをリセットし、交点座標を埋め込む
 		raystr.str("");
 		raystr.clear();
-		raystr<<"("
-		<< std::fixed << std::setprecision(2)
+		raystr << "inter"
+			<< std::fixed << std::setprecision(2)
 			<< inter.m128_f32[0] << ","
 			<< inter.m128_f32[1] << ","
 			<< inter.m128_f32[2] << ")";
 
 		debugText.Print(raystr.str(), 50, 280, 1.f);
+
+		raystr.str("");
+		raystr.clear();
+		raystr << "distance:(" << std::fixed << std::setprecision(2) << distance << ")";
+
+		debugText.Print(raystr.str(), 50, 300, 1.f);
 	}
 
-	object3d->Update();
+	cheeseObj->Update();
 
 }
 
@@ -211,8 +235,8 @@ void GameScene::Draw()
 	Object3d::PreDraw(cmdList);
 
 	// 3Dオブクジェクトの描画
-	object3d->Draw();
-	object3d2->Draw();
+	cheeseObj->Draw();
+	kinokoObj->Draw();
 
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
